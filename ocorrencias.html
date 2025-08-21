@@ -1,49 +1,58 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Ocorrências</title>
-</head>
-<body>
-  <h1>Ocorrências</h1>
-  <p>Registrar e visualizar ocorrências dos alunos.</p>
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Ocorrências por Turma</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ocorrências</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
     }
 
-    .botao {
-      background-color: #d9534f;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    .turma {
-      margin: 10px 0;
-      cursor: pointer;
-      padding: 10px;
-      background-color: #f0ad4e;
-      color: white;
-      border-radius: 5px;
-      max-width: 200px;
+    h1 {
       text-align: center;
+      color: #2e86de;
     }
 
-    .turma:hover {
-      background-color: #ec971f;
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      background-color: #ddd;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-right: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .tab-btn.active {
+      background-color: #2e86de;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     table {
@@ -53,198 +62,132 @@
     }
 
     th, td {
-      border: 1px solid #999;
-      padding: 10px;
+      padding: 12px;
+      border: 1px solid #ccc;
       text-align: left;
     }
 
     th {
-      background-color: #d9534f;
+      background-color: #2e86de;
       color: white;
     }
 
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
-    .voltar {
-      margin-top: 20px;
-      color: blue;
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
       cursor: pointer;
-      text-decoration: underline;
     }
 
-    #turmas-ocorrencias,
-    #tabela-ocorrencias {
-      display: none;
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      background-color: #2e86de;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Sistema de Ocorrências</h1>
+  <div class="container">
+    <h1>Ocorrências</h1>
 
-  <button class="botao" onclick="mostrarTurmasOcorrencias()">Ver Ocorrências</button>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="trocarAba('ver')">Ver Ocorrências</button>
+      <button class="tab-btn" onclick="trocarAba('apagar')">Apagar Ocorrências</button>
+    </div>
 
-  <!-- Lista de Turmas -->
-  <div id="turmas-ocorrencias"></div>
+    <div id="ver" class="tab-content active">
+      <h3>Lista de Ocorrências</h3>
+      <table id="tabelaVer">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Descrição</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-  <!-- Tabela de Ocorrências -->
-  <div id="tabela-ocorrencias">
-    <h2 id="titulo-turma"></h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nome do Aluno</th>
-          <th>Motivo da Ocorrência</th>
-        </tr>
-      </thead>
-      <tbody id="ocorrencias-body">
-        <!-- Conteúdo dinâmico -->
-      </tbody>
-    </table>
-    <div class="voltar" onclick="voltarParaTurmasOcorrencias()">← Voltar para turmas</div>
+    <div id="apagar" class="tab-content">
+      <h3>Apagar Ocorrências</h3>
+      <table id="tabelaApagar">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>Descrição</th>
+            <th>Data</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <a href="menu.html" class="back-btn">← Voltar ao Menu</a>
   </div>
 
   <script>
-    // Dados simulados
-    const ocorrenciasPorTurma = {
-      '3° Novo  Tec': [
-        { nome: 'Ana Clara', motivo: '' },
-        { nome: 'Diego', motivo: '' },
-        { nome: 'Gabrielle', motivo: '' },
-        { nome: 'Giovana', motivo: '' },
-        { nome: 'Guilherme', motivo: '' },
-        { nome: 'Gustavo', motivo: '' },
-        { nome: 'Hawan', motivo: '' },
-        { nome: 'Iarley', motivo: '' },
-        { nome: 'Jerceane', motivo: '' },
-        { nome: 'Kawan', motivo: '' },
-        { nome: 'Mellody', motivo: '' },
-        { nome: 'Milena', motivo: '' },
-        { nome: 'Murilo', motivo: '' },
-        { nome: 'Pedro', motivo: '' },
-        { nome: 'Raissa', motivo: '' },
-        { nome: 'Rai', motivo: '' },
-        { nome: 'Thiago', motivo: '' },
-        { nome: 'Wyverson', motivo: '' },
-      ],
-      '3° Ano A': [
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-      ],
-      '2° Ano A': [
-      { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-    ],
-    '2° Ano B': [
-      { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-    ],
-    '2° Ano C ': [
-      { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-        { nome: '0', motivo: '' },
-    ],
-    }
-    function mostrarTurmasOcorrencias() {
-      const container = document.getElementById('turmas-ocorrencias');
-      container.innerHTML = '';
-      container.style.display = 'block';
+    function trocarAba(id) {
+      const tabs = document.querySelectorAll(".tab-content");
+      const buttons = document.querySelectorAll(".tab-btn");
 
-      for (const turma in ocorrenciasPorTurma) {
-        const div = document.createElement('div');
-        div.className = 'turma';
-        div.textContent = turma;
-        div.onclick = () => mostrarOcorrencias(turma);
-        container.appendChild(div);
-      }
+      tabs.forEach(tab => tab.classList.remove("active"));
+      buttons.forEach(btn => btn.classList.remove("active"));
 
-      document.getElementById('tabela-ocorrencias').style.display = 'none';
+      document.getElementById(id).classList.add("active");
+      event.target.classList.add("active");
     }
 
-    function mostrarOcorrencias(turma) {
-      const ocorrencias = ocorrenciasPorTurma[turma];
-      const corpoTabela = document.getElementById('ocorrencias-body');
-      corpoTabela.innerHTML = '';
+    function carregarTabelas() {
+      const ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
 
-      ocorrencias.forEach(ocorrencia => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${ocorrencia.nome}</td><td>${ocorrencia.motivo}</td>`;
-        corpoTabela.appendChild(tr);
+      const tbodyVer = document.querySelector("#tabelaVer tbody");
+      const tbodyApagar = document.querySelector("#tabelaApagar tbody");
+
+      tbodyVer.innerHTML = "";
+      tbodyApagar.innerHTML = "";
+
+      ocorrencias.forEach((ocorrencia, index) => {
+        // Tabela de visualização
+        const rowVer = document.createElement("tr");
+        rowVer.innerHTML = `
+          <td>${ocorrencia.aluno}</td>
+          <td>${ocorrencia.descricao}</td>
+          <td>${ocorrencia.data}</td>
+        `;
+        tbodyVer.appendChild(rowVer);
+
+        // Tabela de apagar
+        const rowApagar = document.createElement("tr");
+        rowApagar.innerHTML = `
+          <td>${ocorrencia.aluno}</td>
+          <td>${ocorrencia.descricao}</td>
+          <td>${ocorrencia.data}</td>
+          <td><button class="delete-btn" onclick="apagar(${index})">Apagar</button></td>
+        `;
+        tbodyApagar.appendChild(rowApagar);
       });
-
-      document.getElementById('titulo-turma').textContent = turma;
-      document.getElementById('turmas-ocorrencias').style.display = 'none';
-      document.getElementById('tabela-ocorrencias').style.display = 'block';
     }
 
-    function voltarParaTurmasOcorrencias() {
-      mostrarTurmasOcorrencias();
+    function apagar(index) {
+      if (confirm("Tem certeza que deseja apagar esta ocorrência?")) {
+        let ocorrencias = JSON.parse(localStorage.getItem("ocorrencias")) || [];
+        ocorrencias.splice(index, 1);
+        localStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+        carregarTabelas();
+      }
     }
+
+    // Carregar na inicialização
+    window.onload = carregarTabelas;
   </script>
 
 </body>
