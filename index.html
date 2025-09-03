@@ -4,101 +4,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu - Portal do Professor</title>
+  <title>Login - Portal do Professor</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f4f8;
       margin: 0;
       padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    .header {
-      background-color: #2e86de;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .menu-container {
-      padding: 30px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .section {
+    .login-container {
       background-color: white;
-      padding: 20px;
+      padding: 30px;
       border-radius: 8px;
-      margin-bottom: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
     }
 
     h2 {
-      color: #2e86de;
       margin-bottom: 20px;
+      color: #2e86de;
     }
 
-    .menu-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
     }
 
-    .menu-item {
-      flex: 1 1 200px;
+    button {
+      width: 100%;
+      padding: 12px;
       background-color: #2e86de;
       color: white;
-      padding: 15px;
-      text-align: center;
+      border: none;
       border-radius: 5px;
-      text-decoration: none;
+      cursor: pointer;
       font-size: 16px;
-      transition: background-color 0.3s ease;
     }
 
-    .menu-item:hover {
+    button:hover {
       background-color: #1b4f9b;
-    }
-
-    .welcome {
-      font-size: 18px;
-      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>Portal Escolar - Menu Principal</h1>
-  </div>
-
-  <div class="menu-container">
-    <div class="section">
-      <div class="welcome" id="welcomeMessage">Bem-vindo!</div>
-
-      <h2>Menu de Navegação</h2>
-      <div class="menu-links">
-        <a href="registrar-ocorrencias.html" class="menu-item">Registrar Ocorrência</a>
-        <a href="ocorrencias.html" class="menu-item">Ver Ocorrências</a>
-        <a href="turmas.html" class="menu-item">Turmas</a>
-        <a href="disciplinas.html" class="menu-item">Disciplinas</a>
-        <!-- Adicione mais itens conforme necessário -->
-      </div>
-    </div>
+  <div class="login-container">
+    <h2>Portal do Professor</h2>
+    <form id="loginForm">
+      <input type="text" id="nomeProfessor" placeholder="Digite seu nome" required />
+      <button type="submit">Entrar</button>
+    </form>
   </div>
 
   <script>
-    const nomeProfessor = localStorage.getItem('nomeProfessor') || 'Professor';
-    const primeiraVez = localStorage.getItem('firstLogin');
-    const welcomeMessage = document.getElementById('welcomeMessage');
+    const loginForm = document.getElementById('loginForm');
 
-    if (!primeiraVez) {
-      welcomeMessage.innerText = `Bem-vindo, ${nomeProfessor}! Primeira vez por aqui?`;
-      localStorage.setItem('firstLogin', 'false');
-    } else {
-      welcomeMessage.innerText = `Bem-vindo de volta, ${nomeProfessor}!`;
-    }
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const nomeProfessor = document.getElementById('nomeProfessor').value.trim();
+      if (nomeProfessor) {
+        localStorage.setItem('nomeProfessor', nomeProfessor);
+        window.location.href = 'menu.html'; // Redireciona para a página principal
+      } else {
+        alert("Por favor, insira seu nome.");
+      }
+    });
   </script>
 
 </body>
